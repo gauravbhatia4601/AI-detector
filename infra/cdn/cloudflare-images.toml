@@ -1,0 +1,21 @@
+# Example configuration for delivering assets via Cloudflare Images while
+# preserving attached C2PA Content Credentials metadata. The `delivery`
+# section mirrors the options exposed in the Images variant API.
+
+[delivery]
+# Ensure that Content Credentials are always forwarded without being
+# stripped or re-compressed by the CDN.
+content_credentials = "preserve"
+
+# Some image pipelines strip all metadata by default. Explicitly disable
+# metadata removal so C2PA manifests remain attached to derivatives.
+strip_metadata = false
+
+[upload]
+# Variants configured in Cloudflare Images can reference this policy by name.
+variant = "c2pa-preserve"
+
+# Optional: store assets in an isolated bucket or account segment reserved
+# for provenance-aware media so retention policies can differ from standard
+# media assets.
+bucket = "trusted-media"

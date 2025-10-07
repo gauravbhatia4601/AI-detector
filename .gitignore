@@ -1,0 +1,17 @@
+# Rust
+/target
+**/target
+
+# Node
+node_modules/
+**/node_modules
+/dist
+**/dist
+
+# Misc
+.env
+*.log
+.DS_Store
+**/__pycache__/
+*.pyc
+*.egg-info/

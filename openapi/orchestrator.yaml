@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: Orchestrator API
+  version: "1.0.0"
+  description: |
+    Orchestrates provenance, watermark, and detector services to produce a fused
+    policy verdict for submitted media assets.
+servers:
+  - url: http://localhost:8090
+paths:
+  /inspect:
+    post:
+      summary: Inspect an asset
+      description: |
+        Accepts media upload metadata and runs provenance, watermark, and
+        passive deepfake detectors in parallel. The orchestrator persists all
+        evidence and returns the fused verdict.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InspectRequest'
+      responses:
+        '200':
+          description: Inspection verdict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InspectResponse'
+  /report/{assetId}:
+    get:
+      summary: Retrieve an inspection report
+      parameters:
+        - in: path
+          name: assetId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Full audit trail for the asset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportResponse'
+        '404':
+          description: Report not found
+  /health:
+    get:
+      summary: Liveness probe
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+components:
+  schemas:
+    InspectRequest:
+      type: object
+      required: [assetId, mediaType]
+      properties:
+        assetId:
+          type: string
+        mediaType:
+          type: string
+          enum: [image, video, audio]
+        sourceUrl:
+          type: string
+          format: uri
+        provenance:
+          type: object
+          description: Optional provenance verification hints.
+        watermark:
+          type: object
+          description: Optional watermark detection hints.
+    InspectResponse:
+      type: object
+      required: [assetId, verdict, confidence, evidence]
+      properties:
+        assetId:
+          type: string
+        verdict:
+          type: string
+          enum: [approved, flagged, reject, unknown]
+        confidence:
+          type: number
+          format: float
+        evidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+    ReportResponse:
+      type: object
+      required: [assetId, verdict, evidence]
+      properties:
+        assetId:
+          type: string
+        verdict:
+          type: string
+          enum: [approved, flagged, reject, unknown]
+        confidence:
+          type: number
+        evidence:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evidence'
+        createdAt:
+          type: string
+          format: date-time
+        policyVersion:
+          type: string
+    Evidence:
+      type: object
+      required: [source, kind, details]
+      properties:
+        source:
+          type: string
+          example: provenance
+        kind:
+          type: string
+          example: c2pa
+        score:
+          type: number
+          nullable: true
+        details:
+          type: object
+          additionalProperties: true
