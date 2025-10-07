@@ -1,0 +1,168 @@
+{
+  "info": {
+    "name": "AI Detector",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection for orchestrator and detector services"
+  },
+  "item": [
+    {
+      "name": "Orchestrator - Inspect",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{orchestrator_url}}/inspect",
+          "host": ["{{orchestrator_url}}"],
+          "path": ["inspect"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assetId\": \"sample-asset\",\n  \"mediaType\": \"image\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Orchestrator - Report",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{orchestrator_url}}/report/sample-asset",
+          "host": ["{{orchestrator_url}}"],
+          "path": ["report", "sample-asset"]
+        }
+      }
+    },
+    {
+      "name": "Provenance - Verify",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "url": {
+          "raw": "{{provenance_url}}/verify",
+          "host": ["{{provenance_url}}"],
+          "path": ["verify"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"assetId\": \"sample-asset\"\n}"
+        }
+      }
+    },
+    {
+      "name": "SynthID - Check",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{synthid_url}}/check",
+          "host": ["{{synthid_url}}"],
+          "path": ["check"]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "asset",
+              "type": "file",
+              "src": ""
+            },
+            {
+              "key": "mediaType",
+              "value": "image",
+              "type": "text"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Sensity - Analyze",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{sensity_url}}/analyze",
+          "host": ["{{sensity_url}}"],
+          "path": ["analyze"]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "asset",
+              "type": "file",
+              "src": ""
+            },
+            {
+              "key": "mediaType",
+              "value": "image",
+              "type": "text"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Hive - Analyze",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{hive_url}}/analyze",
+          "host": ["{{hive_url}}"],
+          "path": ["analyze"]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "asset",
+              "type": "file",
+              "src": ""
+            },
+            {
+              "key": "mediaType",
+              "value": "image",
+              "type": "text"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Reality Defender - Analyze",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{reality_defender_url}}/analyze",
+          "host": ["{{reality_defender_url}}"],
+          "path": ["analyze"]
+        },
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "asset",
+              "type": "file",
+              "src": ""
+            },
+            {
+              "key": "mediaType",
+              "value": "image",
+              "type": "text"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    { "key": "orchestrator_url", "value": "http://localhost:8090" },
+    { "key": "provenance_url", "value": "http://localhost:8080" },
+    { "key": "synthid_url", "value": "http://localhost:8081" },
+    { "key": "sensity_url", "value": "http://localhost:8082" },
+    { "key": "hive_url", "value": "http://localhost:8083" },
+    { "key": "reality_defender_url", "value": "http://localhost:8084" }
+  ]
+}

@@ -1,0 +1,24 @@
+[project]
+name = "ai-detector-sdk"
+version = "0.1.0"
+description = "Python client for the AI detector orchestrator"
+authors = [
+  { name = "AI Detector" }
+]
+requires-python = ">=3.9"
+dependencies = [
+  "httpx>=0.25.0",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest",
+  "respx>=0.20",
+]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"

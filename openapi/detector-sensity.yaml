@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: Sensity Detector API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8082
+paths:
+  /analyze:
+    post:
+      summary: Analyze media for deepfakes using Sensity
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                asset:
+                  type: string
+                  format: binary
+                mediaType:
+                  type: string
+                  enum: [image, video]
+      responses:
+        '200':
+          description: Detection result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetectionResponse'
+  /health:
+    get:
+      summary: Liveness probe
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+components:
+  schemas:
+    DetectionResponse:
+      type: object
+      required: [label, score, reasons, modelVersion, evidence]
+      properties:
+        label:
+          type: string
+        score:
+          type: number
+          format: float
+        reasons:
+          type: array
+          items:
+            type: string
+        modelVersion:
+          type: string
+        evidence:
+          type: object
+          additionalProperties: true
