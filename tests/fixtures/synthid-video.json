@@ -1,0 +1,28 @@
+{
+  "requestId": "req-video-123",
+  "modality": "VIDEO",
+  "overall": {
+    "verdict": "INCONCLUSIVE",
+    "confidence": null,
+    "explanation": "Video quality too low for an overall verdict."
+  },
+  "segments": [
+    {
+      "startTimeMs": 0,
+      "endTimeMs": 1000,
+      "verdict": "WATERMARK_ABSENT",
+      "confidence": 0.2,
+      "explanation": "No watermark detected in the intro."
+    },
+    {
+      "startTimeMs": 1000,
+      "endTimeMs": 2000,
+      "verdict": "WATERMARK_PRESENT",
+      "confidence": 0.76,
+      "explanation": "SynthID watermark detected on frame 42."
+    }
+  ],
+  "metadata": {
+    "frameCount": 240
+  }
+}

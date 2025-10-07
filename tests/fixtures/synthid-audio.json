@@ -1,0 +1,25 @@
+{
+  "requestId": "req-audio-123",
+  "modality": "AUDIO",
+  "overall": {
+    "verdict": "WATERMARK_ABSENT",
+    "confidence": 0.12,
+    "explanation": "Background noise overwhelms any watermark signal."
+  },
+  "segments": [
+    {
+      "startTimeMs": 0,
+      "endTimeMs": 500,
+      "verdict": "WATERMARK_ABSENT",
+      "confidence": 0.05,
+      "explanation": "Silence at beginning."
+    },
+    {
+      "startTimeMs": 500,
+      "endTimeMs": 2000,
+      "verdict": "INCONCLUSIVE",
+      "confidence": null,
+      "explanation": "Speech mixed with heavy compression artifacts."
+    }
+  ]
+}
