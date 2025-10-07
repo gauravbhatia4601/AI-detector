@@ -1,0 +1,88 @@
+version: "3.9"
+services:
+  provenance:
+    build:
+      context: ../services/provenance-rs
+    environment:
+      - RUST_LOG=info
+    ports:
+      - "8080:8080"
+  synthid:
+    build:
+      context: ../services/watermark-synthid
+    environment:
+      - PORT=8081
+    ports:
+      - "8081:8081"
+    depends_on:
+      - provenance
+  sensity:
+    build:
+      context: ../services/detector-sensity
+    environment:
+      - PORT=8082
+    ports:
+      - "8082:8082"
+  hive:
+    build:
+      context: ../services/detector-hive
+    environment:
+      - PORT=8083
+    ports:
+      - "8083:8083"
+  realitydefender:
+    build:
+      context: ../services/detector-readef
+    environment:
+      - PORT=8084
+    ports:
+      - "8084:8084"
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: orchestrator
+      POSTGRES_USER: orchestrator
+      POSTGRES_PASSWORD: orchestrator
+    ports:
+      - "5432:5432"
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address :9001
+    environment:
+      MINIO_ROOT_USER: orchestrator
+      MINIO_ROOT_PASSWORD: orchestrator123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+  orchestrator:
+    build:
+      context: ../services/orchestrator
+    environment:
+      - PORT=8080
+      - PROVENANCE_URL=http://provenance:8080
+      - SYNTHID_URL=http://synthid:8081
+      - SENSITY_URL=http://sensity:8082
+      - HIVE_URL=http://hive:8083
+      - REALITY_DEFENDER_URL=http://realitydefender:8084
+      - DATABASE_URL=postgresql://orchestrator:orchestrator@postgres:5432/orchestrator
+      - OBJECT_BUCKET=orchestrator
+      - OBJECT_ENDPOINT=http://minio:9000
+      - OBJECT_ACCESS_KEY_ID=orchestrator
+      - OBJECT_SECRET_ACCESS_KEY=orchestrator123
+    ports:
+      - "8085:8080"
+    depends_on:
+      - provenance
+      - synthid
+      - sensity
+      - hive
+      - realitydefender
+      - postgres
+      - minio
+  video_pipeline:
+    build:
+      context: ../services/video-pipeline
+    environment:
+      - ORCHESTRATOR_URL=http://orchestrator:8080
+    depends_on:
+      - orchestrator

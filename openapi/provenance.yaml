@@ -1,0 +1,106 @@
+openapi: 3.0.3
+info:
+  title: Provenance Verification API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8080
+paths:
+  /verify:
+    post:
+      summary: Verify C2PA manifest for an asset
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [assetId]
+              properties:
+                assetId:
+                  type: string
+                url:
+                  type: string
+                  format: uri
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                asset:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Provenance verification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerificationResponse'
+  /manifest/{assetId}:
+    get:
+      summary: Retrieve a cached manifest by asset ID
+      parameters:
+        - in: path
+          name: assetId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Stored manifest details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestResponse'
+        '404':
+          description: Manifest not found
+  /health:
+    get:
+      summary: Liveness probe
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+components:
+  schemas:
+    VerificationResponse:
+      type: object
+      required: [valid, issuer, chain, edits, claims, errors]
+      properties:
+        valid:
+          type: boolean
+        issuer:
+          type: string
+          nullable: true
+        chain:
+          type: array
+          items:
+            type: string
+        edits:
+          type: array
+          items:
+            type: string
+        claims:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        errors:
+          type: array
+          items:
+            type: string
+    ManifestResponse:
+      type: object
+      required: [assetId, manifest]
+      properties:
+        assetId:
+          type: string
+        manifest:
+          type: object
+          additionalProperties: true
