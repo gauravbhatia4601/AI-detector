@@ -1,0 +1,26 @@
+{
+  "detector": "synthid",
+  "requestId": "req-image-123",
+  "evidence": {
+    "modality": "image",
+    "verdict": "watermark_detected",
+    "confidence": 0.92,
+    "notes": [
+      "SynthID watermark found."
+    ],
+    "segments": [],
+    "raw": {
+      "requestId": "req-image-123",
+      "modality": "IMAGE",
+      "overall": {
+        "verdict": "WATERMARK_PRESENT",
+        "confidence": 0.92,
+        "explanation": "SynthID watermark found."
+      },
+      "segments": [],
+      "metadata": {
+        "modelVersion": "2024-05-01"
+      }
+    }
+  }
+}
